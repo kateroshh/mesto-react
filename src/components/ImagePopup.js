@@ -1,6 +1,6 @@
-function ImagePopup({ src, text, onClose }) {
+function ImagePopup({ src, text, isOpen, onClose }) {
   return (
-    <div className={`popup popup-photo ${src ? "popup_opened" : ""}`}>
+    <div className={`popup popup-photo ${isOpen ? "popup_opened" : ""}`}>
       <div className='popup__container popup__container_photo'>
         <img className='popup__img' src={src} alt={text} />
         <p className='popup__description'>{text}</p>

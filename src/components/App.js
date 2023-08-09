@@ -9,6 +9,7 @@ function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
+  const [isPhotoPopupOnen, setPhotoPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
 
   function handleEditAvatarClick() {
@@ -19,15 +20,20 @@ function App() {
     setEditProfilePopupOpen(true);
   }
 
+  function handlePhotoClick() {
+    setPhotoPopupOpen(true);
+  }
+
   function handleAddPlaceClick() {
     setAddPlacePopupOpen(true);
   }
 
   function closeAllPopups() {
-    document.querySelector(".popup_opened").classList.remove("popup_opened");
+    setEditAvatarPopupOpen(false);
+    setEditProfilePopupOpen(false);
+    setAddPlacePopupOpen(false);
+    setPhotoPopupOpen(false);
   }
-
-  console.log(selectedCard);
 
   return (
     <div className='page'>
@@ -37,6 +43,7 @@ function App() {
         onEditProfile={handleEditProfileClick}
         onAddPlace={handleAddPlaceClick}
         onEditAvatar={handleEditAvatarClick}
+        onPhotoClick={handlePhotoClick}
       />
       <Footer />
 
@@ -52,8 +59,8 @@ function App() {
           id='name'
           name='name'
           placeholder='Ваше имя'
-          minlength='2'
-          maxlength='40'
+          minLength='2'
+          maxLength='40'
           required
         />
         <span className='popup-form__error name-error'></span>
@@ -63,12 +70,12 @@ function App() {
           id='description'
           name='link'
           placeholder='Ваша профессия'
-          minlength='2'
-          maxlength='200'
+          minLength='2'
+          maxLength='200'
           required
         />
         <span className='popup-form__error description-error'></span>
-        <button className='popup-form__send' type='submit' disabled='false'>
+        <button className='popup-form__send' type='submit' disabled={false}>
           Сохранить
         </button>
       </PopupWithForm>
@@ -85,8 +92,8 @@ function App() {
           id='title-card'
           name='name'
           placeholder='Название'
-          minlength='2'
-          maxlength='30'
+          minLength='2'
+          maxLength='30'
           required
         />
         <span className='popup-form__error title-card-error'></span>
@@ -116,17 +123,21 @@ function App() {
           id='avatar'
           name='avatar'
           placeholder='Укажите ссылку на новый аватар пользователя'
-          minlength='2'
-          maxlength='500'
+          minLength='2'
+          maxLength='500'
           required
         />
         <span className='popup-form__error avatar-error'></span>
-        <button className='popup-form__send' type='submit' disabled='false'>
+        <button className='popup-form__send' type='submit' disabled={false}>
           Сохранить
         </button>
       </PopupWithForm>
 
-      <ImagePopup {...selectedCard} onClose={closeAllPopups} />
+      <ImagePopup
+        {...selectedCard}
+        isOpen={isPhotoPopupOnen}
+        onClose={closeAllPopups}
+      />
 
       <div className='popup popup-delete-card'>
         <div className='popup__container'>

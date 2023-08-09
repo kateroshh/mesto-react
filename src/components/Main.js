@@ -12,7 +12,13 @@ const dataCards = (cards) => {
   }));
 };
 
-function Main({ onCardClick, onEditProfile, onAddPlace, onEditAvatar }) {
+function Main({
+  onCardClick,
+  onEditProfile,
+  onAddPlace,
+  onEditAvatar,
+  onPhotoClick,
+}) {
   const [userName, setUserName] = useState("");
   const [userDescription, setUserDescription] = useState("");
   const [userAvatar, setUserAvatar] = useState("");
@@ -71,7 +77,12 @@ function Main({ onCardClick, onEditProfile, onAddPlace, onEditAvatar }) {
       <section className='gallery'>
         <ul className='gallery-items'>
           {cards.map((item) => (
-            <Card key={item._id} {...item} onCardClick={onCardClick} />
+            <Card
+              key={item.id}
+              {...item}
+              onCardClick={onCardClick}
+              onPhotoClick={onPhotoClick}
+            />
           ))}
         </ul>
       </section>

@@ -1,6 +1,7 @@
-function Card({ src, text, likesCount, onCardClick }) {
+function Card({ src, text, likesCount, onCardClick, onPhotoClick }) {
   const handleCardClick = () => {
     onCardClick({ src, text });
+    onPhotoClick();
   };
 
   return (
