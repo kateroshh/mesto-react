@@ -52,6 +52,7 @@ function App() {
         title='Редактировать профиль'
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
+        buttonText='Сохранить'
       >
         <input
           className='popup-form__input'
@@ -75,9 +76,6 @@ function App() {
           required
         />
         <span className='popup-form__error description-error'></span>
-        <button className='popup-form__send' type='submit' disabled={false}>
-          Сохранить
-        </button>
       </PopupWithForm>
 
       <PopupWithForm
@@ -85,6 +83,7 @@ function App() {
         title='Новое место'
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
+        buttonText='Создать'
       >
         <input
           className='popup-form__input'
@@ -106,9 +105,6 @@ function App() {
           required
         />
         <span className='popup-form__error link-card-error'></span>
-        <button className='popup-form__send' type='submit'>
-          Создать
-        </button>
       </PopupWithForm>
 
       <PopupWithForm
@@ -116,6 +112,7 @@ function App() {
         title='Обновить аватар'
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}
+        buttonText='Сохранить'
       >
         <input
           className='popup-form__input'
@@ -128,9 +125,6 @@ function App() {
           required
         />
         <span className='popup-form__error avatar-error'></span>
-        <button className='popup-form__send' type='submit' disabled={false}>
-          Сохранить
-        </button>
       </PopupWithForm>
 
       <ImagePopup
@@ -139,21 +133,13 @@ function App() {
         onClose={closeAllPopups}
       />
 
-      <div className='popup popup-delete-card'>
-        <div className='popup__container'>
-          <h3 className='popup__text'>Вы уверены?</h3>
-          <form className='popup__form popup-form' name='delete-card'>
-            <button className='popup-form__send' type='submit'>
-              Да
-            </button>
-          </form>
-          <button
-            className='popup__close popup__close_delete-card'
-            aria-label='Закрыть'
-            type='button'
-          ></button>
-        </div>
-      </div>
+      <PopupWithForm
+        name='delete'
+        title='Вы уверены?'
+        isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}
+        buttonText='Да'
+      ></PopupWithForm>
     </div>
   );
 }
