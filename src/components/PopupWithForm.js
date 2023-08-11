@@ -7,7 +7,7 @@ function PopupWithForm({ name, title, isOpen, onClose, buttonText, children }) {
         <form className='popup__form popup-form' name={name}>
           {children}
           <button className='popup-form__send' type='submit' disabled={false}>
-            {buttonText}
+            {buttonText || "Сохранить"}
           </button>
         </form>
         <button
