@@ -1,46 +1,20 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import avatar from "../images/avatar.png";
-import api from "../utils/api";
 import Card from "./Card";
-
-const dataCards = (cards) => {
-  return cards.map((item) => ({
-    id: item._id,
-    src: item.link,
-    text: item.name,
-    likesCount: item.likes.length ? item.likes.length : 0,
-  }));
-};
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function Main({
   onCardClick,
+  onCardLike,
+  onCardDelete,
   onEditProfile,
   onAddPlace,
   onEditAvatar,
   onPhotoClick,
+  cards,
 }) {
-  const [userName, setUserName] = useState("");
-  const [userDescription, setUserDescription] = useState("");
-  const [userAvatar, setUserAvatar] = useState("");
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInitialCards()])
-      .then(([userData, cardData]) => {
-        setUserName(userData.name);
-        setUserDescription(userData.about);
-        setUserAvatar(userData.avatar);
-
-        const newCards = dataCards(cardData);
-        setCards(newCards);
-      })
-      .catch((err) => {
-        console.log(
-          "Ошибка получения данных пользователя и первоначального списка карточек",
-          err
-        );
-      });
-  }, []);
+  //Подписываемся на глобальный контекст
+  const currentUser = useContext(CurrentUserContext);
 
   return (
     <main className='content'>
@@ -48,14 +22,14 @@ function Main({
         <div className='profile-info'>
           <img
             className='profile-info__avatar'
-            src={userAvatar ? userAvatar : avatar}
+            src={currentUser.avatar ? currentUser.avatar : avatar}
             alt='Фото профиля'
             onClick={onEditAvatar}
           />
           <div className='profile-info__avatar-hover'></div>
           <div className='profile-info__text'>
             <div className='profile-info__name'>
-              <h1 className='profile-info__nametext'>{userName}</h1>
+              <h1 className='profile-info__nametext'>{currentUser.name}</h1>
               <button
                 className='profile-info__edit'
                 aria-label='Редактировать'
@@ -63,7 +37,7 @@ function Main({
                 onClick={onEditProfile}
               ></button>
             </div>
-            <p className='profile-info__description'>{userDescription}</p>
+            <p className='profile-info__description'>{currentUser.about}</p>
           </div>
         </div>
         <button
@@ -78,10 +52,12 @@ function Main({
         <ul className='gallery-items'>
           {cards.map((item) => (
             <Card
-              key={item.id}
-              {...item}
+              key={item._id}
+              card={item}
               onCardClick={onCardClick}
               onPhotoClick={onPhotoClick}
+              onCardLike={onCardLike}
+              onCardDelete={onCardDelete}
             />
           ))}
         </ul>

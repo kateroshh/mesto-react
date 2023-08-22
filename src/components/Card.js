@@ -1,34 +1,66 @@
-function Card({ src, text, likesCount, onCardClick, onPhotoClick }) {
+import { useContext } from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
+
+function Card({ card, onCardClick, onPhotoClick, onCardLike, onCardDelete }) {
+  //Количество лайков
+  const likesCount = card.likes.length ? card.likes.length : 0;
+
   const handleCardClick = () => {
-    onCardClick({ src, text });
+    onCardClick(card.link, card.name);
     onPhotoClick();
   };
+
+  const handleCardLike = () => {
+    onCardLike(card.likes, card._id);
+  };
+
+  const handleDeleteClick = () => {
+    onCardDelete(card._id);
+  };
+
+  //Подписываемся на глобальный контекст
+  const currentUser = useContext(CurrentUserContext);
+
+  // Определяем, являемся ли мы владельцем текущей карточки
+  const isOwn = card.owner._id === currentUser._id;
+
+  // Определяем, есть ли у карточки лайк, поставленный текущим пользователем
+  const isLiked = card.likes.some((i) => i._id === currentUser._id);
+
+  // Создаём переменную, которую после зададим в `className` для кнопки лайка
+  const cardLikeButtonClassName = `gallery-item__btnlike ${
+    isLiked && "gallery-item__btnlike_active"
+  }`;
 
   return (
     <div className='gallery-item-template'>
       <li className='gallery-item'>
         <img
           className='gallery-item__img'
-          src={src}
-          alt={text}
+          src={card.link}
+          alt={card.name}
           onClick={handleCardClick}
         />
         <div className='gallery-item__info'>
-          <h2 className='gallery-item__text'>{text}</h2>
+          <h2 className='gallery-item__text'>{card.name}</h2>
           <div className='gallery-item__like'>
             <button
-              className='gallery-item__btnlike'
+              className={cardLikeButtonClassName}
               aria-label='Нравится'
               type='button'
+              onClick={handleCardLike}
             ></button>
             <p className='gallery-item__textlikes'>{likesCount}</p>
           </div>
         </div>
-        <button
-          className='gallery-item__delete'
-          aria-label='Удалить'
-          type='button'
-        ></button>
+        {isOwn && (
+          <button
+            className='gallery-item__delete'
+            aria-label='Удалить'
+            type='button'
+            onClick={handleDeleteClick}
+          ></button>
+        )}
       </li>
     </div>
   );
