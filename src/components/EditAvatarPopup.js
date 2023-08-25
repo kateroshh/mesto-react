@@ -12,10 +12,6 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateUser }) {
     avatarRef.current.value = currentUser.avatar;
   }, [currentUser]);
 
-  function handleChangeAvatar(e) {
-    avatarRef.current.value = e.target.value;
-  }
-
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
@@ -43,7 +39,6 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateUser }) {
         maxLength='500'
         required
         ref={avatarRef}
-        onChange={handleChangeAvatar}
       />
       <span className='popup-form__error avatar-error'></span>
     </PopupWithForm>

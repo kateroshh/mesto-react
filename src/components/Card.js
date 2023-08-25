@@ -6,12 +6,16 @@ function Card({ card, onCardClick, onPhotoClick, onCardLike, onCardDelete }) {
   const likesCount = card.likes.length ? card.likes.length : 0;
 
   const handleCardClick = () => {
-    onCardClick(card.link, card.name);
+    onCardClick({
+      src: card.link,
+      text: card.name,
+    });
     onPhotoClick();
   };
 
   const handleCardLike = () => {
-    onCardLike(card.likes, card._id);
+    //onCardLike(card.likes, card._id);
+    onCardLike(card);
   };
 
   const handleDeleteClick = () => {
@@ -34,7 +38,7 @@ function Card({ card, onCardClick, onPhotoClick, onCardLike, onCardDelete }) {
 
   return (
     <div className='gallery-item-template'>
-      <li className='gallery-item'>
+      <div className='gallery-item'>
         <img
           className='gallery-item__img'
           src={card.link}
@@ -61,7 +65,7 @@ function Card({ card, onCardClick, onPhotoClick, onCardLike, onCardDelete }) {
             onClick={handleDeleteClick}
           ></button>
         )}
-      </li>
+      </div>
     </div>
   );
 }

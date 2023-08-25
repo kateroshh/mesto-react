@@ -1,13 +1,14 @@
-import { useState, useContext } from "react";
+import { useState, useEffect } from "react";
 import PopupWithForm from "./PopupWithForm";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
-  //Подписываемся на глобальный контекст
-  const currentUser = useContext(CurrentUserContext);
-
   const [text, setText] = useState("");
   const [link, setLink] = useState("");
+
+  useEffect(() => {
+    setText("");
+    setLink("");
+  }, [isOpen]);
 
   function handleChangeText(e) {
     setText(e.target.value);

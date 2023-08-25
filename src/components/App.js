@@ -14,7 +14,7 @@ function App() {
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [isPhotoPopupOnen, setPhotoPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
 
@@ -32,20 +32,32 @@ function App() {
       });
   }, []);
 
-  function handleCardLike(likes, id) {
+  function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
-    const isLiked = likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
     // Отправляем запрос в API и получаем обновлённые данные карточки
-    api.changeLikeCardStatus(id, !isLiked).then((newCard) => {
-      setCards((state) => state.map((c) => (c._id === id ? newCard : c)));
-    });
+    api
+      .changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((c) => (c._id === card._id ? newCard : c))
+        );
+      })
+      .catch((err) => {
+        console.log("Ошибка получения новых данных setCards", err);
+      });
   }
 
   function handleCardDelete(id) {
-    api.deleteCard(id);
-    const result = cards.filter((card) => card._id !== id);
-    setCards(result);
+    api
+      .deleteCard(id)
+      .then(() => {
+        setCards((state) => state.filter((card) => card._id !== id));
+      })
+      .catch((err) => {
+        console.log("Ошибка удаления карточки deleteCard", err);
+      });
   }
 
   function handleEditAvatarClick() {
@@ -144,7 +156,8 @@ function App() {
         />
 
         <ImagePopup
-          {...selectedCard}
+          card={selectedCard}
+          // {...selectedCard}
           isOpen={isPhotoPopupOnen}
           onClose={closeAllPopups}
         />
