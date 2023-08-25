@@ -10,7 +10,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateUser }) {
   // После загрузки текущего пользователя из API его данные будут использованы в управляемых компонентах.
   useEffect(() => {
     avatarRef.current.value = currentUser.avatar;
-  }, [currentUser]);
+  }, [currentUser, isOpen]);
 
   function handleSubmit(e) {
     // Запрещаем браузеру переходить по адресу формы
