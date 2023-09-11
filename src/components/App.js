@@ -1,11 +1,14 @@
-import Header from "./Header";
 import Main from "./Main";
-import Footer from "./Footer";
+import Register from "./Register";
+import Login from "./Login";
+import Layout from "./Layout";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import InfoTooltip from "./InfoTooltip";
 import ImagePopup from "./ImagePopup";
 import { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
 import api from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
@@ -14,6 +17,7 @@ function App() {
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [isPhotoPopupOnen, setPhotoPopupOpen] = useState(false);
+  const [isInfoTooltip, setInfoTooltip] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
@@ -72,6 +76,10 @@ function App() {
     setPhotoPopupOpen(true);
   }
 
+  function handleInfoTooltipClick() {
+    setInfoTooltip(true);
+  }
+
   function handleAddPlaceClick() {
     setAddPlacePopupOpen(true);
   }
@@ -81,6 +89,7 @@ function App() {
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
     setPhotoPopupOpen(false);
+    setInfoTooltip(false);
   }
 
   function handleUpdateUser(user) {
@@ -124,18 +133,33 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className='page'>
-        <Header />
-        <Main
-          onCardClick={setSelectedCard}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onPhotoClick={handlePhotoClick}
-          cards={cards}
-        />
-        <Footer />
+        <Routes>
+          <Route path='/' element={<Layout />}>
+            <Route
+              index
+              element={
+                <Main
+                  onCardClick={setSelectedCard}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete}
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onEditAvatar={handleEditAvatarClick}
+                  onPhotoClick={handlePhotoClick}
+                  cards={cards}
+                />
+              }
+            />
+            <Route
+              path='sign-up'
+              element={<Register onInfoTooltip={handleInfoTooltipClick} />}
+            />
+            <Route
+              path='sign-in'
+              element={<Login onInfoTooltip={handleInfoTooltipClick} />}
+            />
+          </Route>
+        </Routes>
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
@@ -159,6 +183,13 @@ function App() {
           card={selectedCard}
           // {...selectedCard}
           isOpen={isPhotoPopupOnen}
+          onClose={closeAllPopups}
+        />
+
+        <InfoTooltip
+          title={"Вы успешно зарегистрировались!"}
+          isSuccess={true}
+          isOpen={isInfoTooltip}
           onClose={closeAllPopups}
         />
 
